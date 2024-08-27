@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_gina_system
+    # restart policy to make sure the container is restarted automatically when your machine is rebooted
+    restart: unless-stopped
+    ports:
+      - "5431:5432"
+    volumes:
+      - ./.docker_volume/postgress:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: gina_system
+      POSTGRES_USER: adminadmin
+      POSTGRES_PASSWORD: adminadmin
