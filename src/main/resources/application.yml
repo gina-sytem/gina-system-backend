@@ -1,0 +1,21 @@
+server:
+  port: ${GINA_SYSTEM_SERVER_PORT:8081}
+
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: gina-system-backend
+  datasource:
+    ## default connection pool
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
+
+    ## PostgreSQL
+    url: ${GINA_SYSTEM_DATABASE_URL}
+    username: ${GINA_SYSTEM_DATABASE_USERNAME}
+    password: ${GINA_SYSTEM_DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
