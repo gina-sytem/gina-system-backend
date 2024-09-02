@@ -42,8 +42,20 @@
 #   This will create a file like V2__add_new_table.sql if V1__initial_migration.sql exists.
 # -----------------------------------------------------------------------------
 
+# Function to get the script directory in a portable way
+get_script_dir() {
+  # Use realpath if available, otherwise fallback
+  if command -v realpath > /dev/null 2>&1; then
+    dirname "$(realpath "$0")"
+  else
+    # Fallback for MacOS (zsh)
+    cd "$(dirname "$0")" || exit
+    pwd
+  fi
+}
+
 # Get the directory where the script is located
-SCRIPT_DIR=$(dirname "$(realpath "$0")")
+SCRIPT_DIR=$(get_script_dir)
 
 # Define the migration path relative to the script directory
 MIGRATION_PATH="$SCRIPT_DIR/src/main/resources/migration/data"
@@ -96,7 +108,7 @@ while ! validate_description "$DESCRIPTION"; do
 done
 
 # Find the highest version number in the current directory
-HIGHEST_VERSION=$(ls V*__*.sql 2>/dev/null | sed -e 's/^V\([0-9]\+\)__.*$/\1/' | sort -n | tail -1)
+HIGHEST_VERSION=$(ls V*__*.sql 2>/dev/null | sed -E 's/^V([0-9]+)__.*$/\1/' | sort -n | tail -1)
 
 # If no version found, start with 1
 if [ -z "$HIGHEST_VERSION" ]; then
