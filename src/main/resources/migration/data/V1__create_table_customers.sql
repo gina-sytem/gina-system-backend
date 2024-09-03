@@ -3,12 +3,12 @@ CREATE TABLE customers
     id               UUID                        NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
     name             TEXT                        NOT NULL,
     document         TEXT                        NOT NULL UNIQUE,
-    birth_date       timestamp(0) with time zone NOT NULL,
+    birth_date       TIMESTAMP(0) WITH TIME ZONE NOT NULL,
     phone_number     TEXT                        NOT NULL UNIQUE,
     email            TEXT                        NOT NULL UNIQUE,
     reference_number TEXT                        NOT NULL,
-    created_at       timestamp(0) with time zone NOT NULL             DEFAULT NOW(),
-    updated_at       timestamp(0) with time zone NOT NULL             DEFAULT NOW()
+    created_at       TIMESTAMP(0) WITH TIME ZONE NOT NULL             DEFAULT NOW(),
+    updated_at       TIMESTAMP(0) WITH TIME ZONE NOT NULL             DEFAULT NOW()
 );
 
 COMMENT ON COLUMN customers.id IS 'Unique identifier for each customer';
