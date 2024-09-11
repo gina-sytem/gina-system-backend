@@ -18,15 +18,23 @@ on:
 
 jobs:
   test:
-    if: contains(github.event.pull_request.labels.*.name, 'run_tests')
     runs-on: ubuntu-latest
     steps:
+    - name: Check if label 'run_tests' is present
+      if: "!contains(github.event.pull_request.labels.*.name, 'run_tests')"
+      uses: actions/github-script@v7.0.1
+      with:
+        script: |
+          core.setFailed('Job fail, if you want to run test make sure to use run_tests label')
     - uses: actions/checkout@v4
+      if: ${{ success() }}
     - name: Set up JDK 21
+      if: ${{ success() }}
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'oracle'
         cache: maven
     - name: Build with Maven
+      if: ${{ success() }}
       run: mvn -B clean test --file pom.xml
