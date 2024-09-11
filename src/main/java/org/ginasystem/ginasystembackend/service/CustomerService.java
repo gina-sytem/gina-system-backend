@@ -17,7 +17,6 @@ public class CustomerService {
         // todo: dexar automatico
         customer.setCreatedAt(LocalDateTime.now());
         customer.setUpdatedAt(LocalDateTime.now());
-
         return customerRepository.save(customer);
     }
 }
