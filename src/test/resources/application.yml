@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: gina-system-backend
+  datasource:
+    url: jdbc:tc:postgresql:16:///gina_system_testcontainers
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  flyway:
+    locations: filesystem:src/main/resources/migration/data
+    enabled: true
+    baseline-description: true
