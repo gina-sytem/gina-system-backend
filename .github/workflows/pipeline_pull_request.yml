@@ -10,11 +10,10 @@ name: Backend Pipeline for Pull Requests
 
 on:
   pull_request:
-    branches:
-      - main
-  pull_request_target:
     types:
       - labeled
+    branches:
+      - main
 
 jobs:
   test:
