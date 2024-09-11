@@ -10,14 +10,11 @@ name: Backend Pipeline for Pull Requests
 
 on:
   pull_request:
-    branches:
-      - main
-    types:
-      - labeled
+    types: [ labeled ]
 
 jobs:
   test:
-    if: github.event.label.name == 'run_tests'
+    if: contains(github.event.pull_request.labels.*.name, 'run_tests')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
