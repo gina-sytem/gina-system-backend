@@ -1,0 +1,26 @@
+##################
+# BUILD STEP
+##################
+FROM maven:3.9.9-eclipse-temurin-21-alpine as build
+
+## Install cURL
+RUN apk add --no-cache make
+
+## Build project
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src src
+COPY lombok.config .
+COPY Makefile .
+RUN make build/jvm
+
+##################
+# RELEASE STEP
+##################
+FROM maven:3.9.9-eclipse-temurin-21-alpine as release
+WORKDIR /app
+COPY --from=build /target/*.jar ./app.jar
+RUN adduser -D gina
+USER gina
+EXPOSE 8081
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "-Dfile.encoding=UTF-8", "-Dlog4j2.formatMsgNoLookups=true"]

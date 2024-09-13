@@ -38,3 +38,44 @@ db/migration/info:
 .PHONY: db/migration/new_file
 db/migration/new_file:
 	@bash ./create_migration.sh
+
+# ==================================================================================== #
+# QUALITY CONTROL
+# ==================================================================================== #
+
+## tests: Run tests
+.PHONY: tests
+tests:
+	@echo 'Running tests...'
+	@mvn -B clean test --file pom.xml
+
+
+# ==================================================================================== #
+# BUILD
+# ==================================================================================== #
+
+## build/jvm: Build the project to be run on a JVM environment
+.PHONY: build/jvm
+build/jvm:
+	@echo 'Building for JVM...'
+	@mvn -B -Dmaven.test.skip clean package
+
+## build/graalvm: Build an executable to be run without JVM
+.PHONY: build/graalvm
+build/graalvm:
+	@echo 'Building for GraalVM...'
+	@mvn -Pnative -Dmaven.test.skip spring-boot:build-image
+
+## /build/docker/jvm: Build a Docker image with jvm
+.PHONY: /build/docker/jvm
+build/docker/jvm:
+	@echo 'Building docker image for JVM...'
+	@docker build --tag 'gina-system-backend' -f Dockerfile_jdk .
+
+.PHONY: temp/up
+temp/up:
+	@docker run --rm -p 8080:8080 --network dev_local \
+	-e GINA_SYSTEM_DATABASE_URL='jdbc:postgresql://postgres_gina_system:5431/gina_system' \
+    -e GINA_SYSTEM_DATABASE_USERNAME='adminadmin' \
+    -e GINA_SYSTEM_DATABASE_PASSWORD='adminadmin' \
+    -e GINA_SYSTEM_SERVER_PORT='8089'

@@ -9,6 +9,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.time.ZoneId;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 @OpenAPIDefinition(
 	info = @Info(
 		title = "Gina System - Backend API",
@@ -23,12 +27,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		description = "Wiki do projeto"
 	)
 )
+@SpringBootApplication
 @RequiredArgsConstructor
 @EnableJpaRepositories(basePackages = "org.ginasystem.ginasystembackend.repository")
-@SpringBootApplication
 public class GinaSystemBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GinaSystemBackendApplication.class, args);
+		final var timeZone = ZoneId.systemDefault().getDisplayName(TextStyle.NARROW, Locale.ENGLISH);
+
+		System.out.println("TimeZone: " + timeZone);
 	}
 }
