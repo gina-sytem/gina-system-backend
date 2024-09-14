@@ -15,6 +15,23 @@ services:
     networks:
       - dev_local
 
+  gina_system_backend:
+    build:
+      context: ../
+      dockerfile: Dockerfile_jdk
+    container_name: gina_system_backend
+    ports:
+      - "8080:8080"
+    environment:
+      GINA_SYSTEM_DATABASE_URL: jdbc:postgresql://postgres_gina_system:5432/gina_system
+      GINA_SYSTEM_DATABASE_USERNAME: adminadmin
+      GINA_SYSTEM_DATABASE_PASSWORD: adminadmin
+      GINA_SYSTEM_SERVER_PORT: 8080
+    command:
+      - -Duser.timezone="UTC"
+    networks:
+      - dev_local
+
 networks:
   dev_local:
     external: true

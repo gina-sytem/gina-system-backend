@@ -54,28 +54,28 @@ tests:
 # BUILD
 # ==================================================================================== #
 
+# Native Builds
+
 ## build/jvm: Build the project to be run on a JVM environment
 .PHONY: build/jvm
 build/jvm:
+	@echo '### Make sure Java JDK is installed, version 21 minimum ### '
 	@echo 'Building for JVM...'
 	@mvn -B -Dmaven.test.skip clean package
 
 ## build/graalvm: Build an executable to be run without JVM
 .PHONY: build/graalvm
 build/graalvm:
+	@echo '### Make sure GraalVM JDK is installed, version 21 minimum ###'
 	@echo 'Building for GraalVM...'
-	@mvn -Pnative -Dmaven.test.skip spring-boot:build-image
+	@mvn clean native:compile -B -Pnative -Dmaven.test.skip
 
-## /build/docker/jvm: Build a Docker image with jvm
-.PHONY: /build/docker/jvm
+# Docker Builds
+
+## build/docker/jvm: Build a Docker image with jvm
+.PHONY: build/docker/jvm
 build/docker/jvm:
+	@echo '### Make sure Docker is installed ###'
 	@echo 'Building docker image for JVM...'
 	@docker build --tag 'gina-system-backend' -f Dockerfile_jdk .
 
-.PHONY: temp/up
-temp/up:
-	@docker run --rm -p 8080:8080 --network dev_local \
-	-e GINA_SYSTEM_DATABASE_URL='jdbc:postgresql://postgres_gina_system:5431/gina_system' \
-    -e GINA_SYSTEM_DATABASE_USERNAME='adminadmin' \
-    -e GINA_SYSTEM_DATABASE_PASSWORD='adminadmin' \
-    -e GINA_SYSTEM_SERVER_PORT='8089'
