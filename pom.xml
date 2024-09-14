@@ -201,6 +201,13 @@
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <imageName>${project.name}.graalvm</imageName>
+                    <buildArgs>
+                        <buildArg>--static</buildArg>
+                        <buildArg>--libc=musl</buildArg>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>

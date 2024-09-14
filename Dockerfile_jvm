@@ -3,10 +3,18 @@
 ##################
 FROM maven:3.9.9-eclipse-temurin-21-alpine as build
 
-## Install cURL
+# CURL SETUP
+RUN echo "######################"
+RUN echo "CURL SETUP"
+RUN echo "######################"
+
 RUN apk add --no-cache make
 
-## Build project
+# BUILD PROJECT
+RUN echo "######################"
+RUN echo "BUILD PROJECT"
+RUN echo "######################"
+
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src src
@@ -19,9 +27,9 @@ RUN make build/jvm
 ##################
 FROM maven:3.9.9-eclipse-temurin-21-alpine as release
 WORKDIR /app
-COPY docker_entrypoint.sh .
+COPY docker_jvm_entrypoint.sh .
 COPY --from=build /target/*.jar ./app.jar
-RUN adduser -D gina && chmod +x ./docker_entrypoint.sh
+RUN adduser -D gina && chmod +x ./docker_jvm_entrypoint.sh
 USER gina
 EXPOSE 8081
-ENTRYPOINT ["/app/docker_entrypoint.sh"]
+ENTRYPOINT ["/app/docker_jvm_entrypoint.sh"]
