@@ -203,9 +203,13 @@
                 <artifactId>native-maven-plugin</artifactId>
                 <configuration>
                     <imageName>${project.name}.graalvm</imageName>
+                    <jvmArgs>
+                        <arg>-XX:MaxRAMPercentage=99.0</arg>
+                    </jvmArgs>
                     <buildArgs>
                         <buildArg>--static</buildArg>
                         <buildArg>--libc=musl</buildArg>
+                        <buildArg>-march=native</buildArg>
                     </buildArgs>
                 </configuration>
             </plugin>
