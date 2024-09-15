@@ -1,0 +1,13 @@
+name: Backend Pipeline for Deploy
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test
+      run: echo "Running..."
