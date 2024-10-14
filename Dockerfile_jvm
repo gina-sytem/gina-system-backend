@@ -1,0 +1,35 @@
+##################
+# BUILD STEP
+##################
+FROM maven:3.9.9-eclipse-temurin-21-alpine as build
+
+# CURL SETUP
+RUN echo "######################"
+RUN echo "CURL SETUP"
+RUN echo "######################"
+
+RUN apk add --no-cache make
+
+# BUILD PROJECT
+RUN echo "######################"
+RUN echo "BUILD PROJECT"
+RUN echo "######################"
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src src
+COPY lombok.config .
+COPY Makefile .
+RUN make build/jvm
+
+##################
+# RELEASE STEP
+##################
+FROM maven:3.9.9-eclipse-temurin-21-alpine as release
+WORKDIR /app
+COPY docker_jvm_entrypoint.sh .
+COPY --from=build /target/*.jar ./app.jar
+RUN adduser -D gina && chmod +x ./docker_jvm_entrypoint.sh
+USER gina
+EXPOSE 8081
+ENTRYPOINT ["/app/docker_jvm_entrypoint.sh"]

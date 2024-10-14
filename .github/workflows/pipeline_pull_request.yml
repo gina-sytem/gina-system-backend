@@ -37,4 +37,4 @@ jobs:
         cache: maven
     - name: Build with Maven
       if: ${{ success() }}
-      run: mvn -B clean test --file pom.xml
+      run: make tests

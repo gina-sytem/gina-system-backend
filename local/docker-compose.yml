@@ -1,5 +1,3 @@
-version: '3.1'
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -9,8 +7,31 @@ services:
     ports:
       - "5431:5432"
     volumes:
-      - ./.docker_volume/postgress:/var/lib/postgresql/data
+      - ./.docker_volume/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: gina_system
       POSTGRES_USER: adminadmin
       POSTGRES_PASSWORD: adminadmin
+    networks:
+      - dev_local
+
+  gina_system_backend:
+    build:
+      context: ../
+      dockerfile: Dockerfile_jdk
+    container_name: gina_system_backend
+    ports:
+      - "8080:8080"
+    environment:
+      GINA_SYSTEM_DATABASE_URL: jdbc:postgresql://postgres_gina_system:5432/gina_system
+      GINA_SYSTEM_DATABASE_USERNAME: adminadmin
+      GINA_SYSTEM_DATABASE_PASSWORD: adminadmin
+      GINA_SYSTEM_SERVER_PORT: 8080
+    command:
+      - -Duser.timezone="UTC"
+    networks:
+      - dev_local
+
+networks:
+  dev_local:
+    external: true
